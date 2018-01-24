@@ -4,6 +4,7 @@ module Parser
     , parseString
     , parseAtom
     , parseNumber
+    , parseDecimal
     , parseHex
     , parseOct
     , parseExpr
@@ -54,7 +55,10 @@ parseAtom = do
                _    -> Atom atom
 
 parseNumber :: Parser LispVal
-parseNumber = liftM (Number . read) $ many1 digit
+parseNumber = do
+    parseDecimal
+    <|> try parseHex
+    <|> try parseOct
 
 parseNumber' :: Parser LispVal
 parseNumber' = do
@@ -63,6 +67,9 @@ parseNumber' = do
 
 parseNumber'' :: Parser LispVal
 parseNumber'' = many1 digit >>= \x -> return $ Number $ read x
+
+parseDecimal :: Parser LispVal
+parseDecimal = liftM (Number . read) $ many1 digit
 
 parseHex :: Parser LispVal
 parseHex = do
