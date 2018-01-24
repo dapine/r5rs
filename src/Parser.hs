@@ -35,8 +35,14 @@ spaces = skipMany1 space
 special :: Parser Char
 special = oneOf "()[],.;{}"
 
+lspace :: Parser Char
+lspace = string "space" >> return ' '
+
+lnewline :: Parser Char
+lnewline = string "newline" >> return '\n'
+
 lchar :: Parser Char
-lchar = letter <|> special <|> symbol
+lchar = try lspace <|> try lnewline <|> letter <|> special <|> symbol
 
 parseString :: Parser LispVal
 parseString = do
