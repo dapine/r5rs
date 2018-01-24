@@ -3,6 +3,13 @@ module Parser
     , spaces
     , parseString
     , parseAtom
+    , parseNumber
+    , parseHex
+    , parseOct
+    , parseExpr
+    , parseList
+    , parseDottedList
+    , parseQuoted
     ) where
 
 import Text.ParserCombinators.Parsec hiding (spaces)
@@ -63,6 +70,13 @@ parseHex = do
     char 'x'
     x <- many1 hexDigit
     return $ Number $ fst . head . readHex $ x
+
+parseOct :: Parser LispVal
+parseOct = do
+    char '#'
+    char 'o'
+    x <- many1 octDigit
+    return $ Number $ fst . head . readOct $ x
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
