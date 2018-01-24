@@ -2,6 +2,7 @@ module Parser
     ( symbol
     , spaces
     , parseString
+    , parseCharacter
     , parseAtom
     , parseNumber
     , parseDecimal
@@ -22,13 +23,20 @@ data LispVal = Atom String
              | DottedList [LispVal] LispVal
              | Number Integer
              | String String
-             | Bool Bool deriving (Eq, Show)
+             | Bool Bool
+             | Character Char deriving (Eq, Show)
 
 symbol :: Parser Char
 symbol = oneOf "!#$%&|*+-/:<=>?@^_~"
 
 spaces :: Parser ()
 spaces = skipMany1 space
+
+special :: Parser Char
+special = oneOf "()[],.;{}"
+
+lchar :: Parser Char
+lchar = letter <|> special <|> symbol
 
 parseString :: Parser LispVal
 parseString = do
@@ -44,6 +52,13 @@ parseString' = do
     char '"'
     return $ String x
 
+parseCharacter :: Parser LispVal
+parseCharacter = do
+    char '#'
+    char '\\'
+    x <- lchar
+    return $ Character x
+
 parseAtom :: Parser LispVal
 parseAtom = do
     first <- letter <|> symbol
@@ -55,10 +70,7 @@ parseAtom = do
                _    -> Atom atom
 
 parseNumber :: Parser LispVal
-parseNumber = do
-    parseDecimal
-    <|> try parseHex
-    <|> try parseOct
+parseNumber = parseDecimal <|> try parseHex <|> try parseOct
 
 parseNumber' :: Parser LispVal
 parseNumber' = do
