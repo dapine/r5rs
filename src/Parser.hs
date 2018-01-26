@@ -8,6 +8,7 @@ module Parser
     , parseDecimal
     , parseHex
     , parseOct
+    , parseFloat
     , parseExpr
     , parseList
     , parseDottedList
@@ -22,6 +23,7 @@ data LispVal = Atom String
              | List [LispVal]
              | DottedList [LispVal] LispVal
              | Number Integer
+             | Float Double
              | String String
              | Bool Bool
              | Character Char deriving (Eq, Show)
@@ -102,6 +104,13 @@ parseOct = do
     char 'o'
     x <- many1 octDigit
     return $ Number $ fst . head . readOct $ x
+
+parseFloat :: Parser LispVal
+parseFloat = do
+    first <- many1 digit
+    char '.'
+    rest <- many1 digit
+    return $ Float $ fst . head . readFloat $ first ++ "." ++ rest
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
