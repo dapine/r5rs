@@ -1,10 +1,10 @@
 name:                r5rs
 version:             0.1.0.0
-github:              "githubuser/r5rs"
+github:              "dapine/r5rs"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+author:              "David Pinheiro"
+maintainer:          "davepinh@gmail.com"
+copyright:           "2018 David Pinheiro"
 
 extra-source-files:
 - README.md
