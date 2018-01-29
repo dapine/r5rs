@@ -9,6 +9,7 @@ module Parser
     , parseHex
     , parseOct
     , parseFloat
+    , parseRational
     , parseExpr
     , parseList
     , parseDottedList
@@ -24,6 +25,7 @@ data LispVal = Atom String
              | DottedList [LispVal] LispVal
              | Number Integer
              | Float Double
+             | Rational { nom :: Integer, denom :: Integer }
              | String String
              | Bool Bool
              | Character Char deriving (Eq, Show)
@@ -111,6 +113,13 @@ parseFloat = do
     char '.'
     rest <- many1 digit
     return $ Float $ fst . head . readFloat $ first ++ "." ++ rest
+
+parseRational :: Parser LispVal
+parseRational = do
+    n <- many1 digit
+    char '/'
+    d <- many1 digit
+    return $ Rational (toInteger $ read n) (toInteger $ read d)
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
