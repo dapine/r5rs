@@ -32,7 +32,7 @@ data LispVal = Atom String
              | Rational { nom :: Integer, denom :: Integer }
              | String String
              | Bool Bool
-             | Character Char deriving (Eq, Show)
+             | Character Char deriving (Eq)
 
 symbol :: Parser Char
 symbol = oneOf "!#$%&|*+-/:<=>?@^_~"
