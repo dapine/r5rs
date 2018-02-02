@@ -14,6 +14,10 @@ module Parser
     , parseList
     , parseDottedList
     , parseQuoted
+    , LispVal ( Atom, List, DottedList
+              , Number, Float, Rational
+              , String, Bool, Character
+              )
     ) where
 
 import Text.ParserCombinators.Parsec hiding (spaces)
