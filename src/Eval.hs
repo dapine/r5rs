@@ -18,3 +18,9 @@ unwordList :: [LispVal] -> String
 unwordList = unwords . map showVal
 
 instance Show LispVal where show = showVal
+
+eval :: LispVal -> LispVal
+eval val@(String _) = val
+eval val@(Number _) = val
+eval val@(Bool _) = val
+eval (List [Atom "quote", val]) = val
