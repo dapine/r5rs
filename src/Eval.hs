@@ -21,7 +21,10 @@ primitives = [("+", numericBinop (+)),
               ("/", numericBinop div),
               ("mod", numericBinop mod),
               ("quotient", numericBinop quot),
-              ("remainder", numericBinop rem)]
+              ("remainder", numericBinop rem),
+              ("string?", typeTest testStr),
+              ("number?", typeTest testNum),
+              ("boolean?", typeTest testBool)]
 
 unwordList :: [LispVal] -> String
 unwordList = unwords . map showVal
@@ -49,3 +52,18 @@ unpackNum (String n) = let parsed = reads n :: [(Integer, String)] in
                               else fst $ parsed !! 0
 unpackNum (List [n]) = unpackNum n
 unpackNum _ = 0
+
+typeTest :: (LispVal -> LispVal) -> [LispVal] -> LispVal
+typeTest op params = op $ head params
+
+testStr :: LispVal -> LispVal
+testStr (String _) = Bool True
+testStr _ = Bool False
+
+testNum :: LispVal -> LispVal
+testNum (Number _) = Bool True
+testNum _ = Bool False
+
+testBool :: LispVal -> LispVal
+testBool (Bool _) = Bool True
+testBool _ = Bool False
